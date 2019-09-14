@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const constants = require('./constants')
+const passface_manager = require('./passface-manager')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -14,6 +15,7 @@ function createWindow () {
       nodeIntegration: true
     }
   })
+  passface_manager.pass_list(constants.PASSWORD_STORE)
 
   // and load the index.html of the app.
   win.loadFile(constants.htmlFile('index.html'))
