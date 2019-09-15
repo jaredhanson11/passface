@@ -1,24 +1,32 @@
-// @ts-check
 const fs = require("fs")
 const path = require("path")
 const constants = require("../constants")
+
+class PasswordEntry {
+   name
+   path
+   isDirectory
+
+   constructor(name, path, isDirectory) {
+      this.name = name
+      this.path = path
+      this.isDirectory = isDirectory
+   }
+}
 
 /**
  * Pass List loops through the $PASSWORD_STORE directory and finds all *.gpg files
  */
 module.exports.pass_list = function pass_list(directory) {
-   /** @type { Array<string> } */
-   var passwordNames = []
-   /** @type { Array<string> } */
-   var directoryNames = []
-   let files = fs.readdirSync(constants.PASSWORD_STORE);
+   let dir = path.join(constants.PASSWORD_STORE, directory)
+   var passwordEntries = []
+   let files = fs.readdirSync(dir);
    files.forEach(file => {
-      fs.stat(path.join(directory, file), (err, stats) => {
-         if (stats.isDirectory()) {directoryNames.push(file)}
-         else {passwordNames.push(file)}
-      })
+      let stats = fs.statSync(path.join(dir, file))
+      let passwordEntry = new PasswordEntry(file, dir, stats.isDirectory())
+      passwordEntries.push(passwordEntry)
    })
-   return {directory, directoryNames, passwordNames}
+   return passwordEntries
 }
 
 /**
