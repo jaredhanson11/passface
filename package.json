@@ -13,6 +13,7 @@
     "electron": "^6.0.8"
   },
   "dependencies": {
+    "electron-store": "^5.0.0",
     "gpg": "^0.6.0",
     "jquery": "^3.4.1"
   }
