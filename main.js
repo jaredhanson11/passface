@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const path = require ('path')
-const constants = require('./constants')
+const passfaceConstants = require('./main/passface-core/passface-constants')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -17,7 +17,7 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadFile(path.join(constants.PROJECT_BASE, 'index', 'index.html'))
+  win.loadFile(path.join(passfaceConstants.RENDERER_BASE, 'index', 'index.html'))
 
   // Open the DevTools.
   win.webContents.openDevTools()
@@ -55,3 +55,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// Register listeners
+const main = require('./main/main')
+main.registerEvents()

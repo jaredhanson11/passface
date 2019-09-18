@@ -1,10 +1,10 @@
-const path = require("path")
-const os = require("os")
-
-const PROJECT_BASE = path.join(__dirname)
-const PASSWORD_STORE = path.join(os.homedir(), ".password-store")
+IPC_CONSTANTS = {
+    // Define IPC channels
+    GET_PASS_LIST: 'get-pass-list-synchronous',
+    GET_PASSWORD: 'get-password-synchronous',
+    ENCRYPT_PASSWORD: 'encrypt-password-synchronous'
+};
 
 module.exports = { 
-    PROJECT_BASE,
-    PASSWORD_STORE
+    IPC_CONSTANTS
 }

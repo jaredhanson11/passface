@@ -1,20 +1,26 @@
 const fs = require("fs")
 const path = require("path")
-const constants = require("../constants")
+const passfaceConstants = require("./passface-constants")
 const models = require("./passface-models")
 
 /**
  * Pass List loops through the $PASSWORD_STORE directory and finds all *.gpg files
  */
 module.exports.pass_list = function pass_list(directory) {
-   let dir = path.join(constants.PASSWORD_STORE, directory)
+   let dir = path.join(passfaceConstants.PASSWORD_STORE, directory)
    var passwordEntries = []
    let files = fs.readdirSync(dir);
    files.forEach(file => {
       let stats = fs.statSync(path.join(dir, file))
-      let passwordEntry = new models.PasswordEntry(file, dir, stats.isDirectory())
+      let passwordEntry = new models.PasswordEntry(file, directory, stats.isDirectory())
       passwordEntries.push(passwordEntry)
    })
+
+   // If not the root of ~/.password-store directory, then add "../" directory
+   if (directory == null || directory.trim() != ".") {
+      let dotDot = new models.PasswordEntry('..', directory, true)
+      passwordEntries = [dotDot, ...passwordEntries]
+   }
    return passwordEntries
 }
 
