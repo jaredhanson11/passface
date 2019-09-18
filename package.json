@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "templates": "./scripts/make_templates.py"
+    "templates": "./utils/scripts/make_templates.py"
   },
   "author": "",
   "license": "ISC",
