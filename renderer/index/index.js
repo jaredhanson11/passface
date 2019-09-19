@@ -9,7 +9,8 @@ $(document).ready(function(event) {
 
 function renderPasswordList(_path) {
     let passwordEntries = ipcRenderer.sendSync(constants.IPC_CONSTANTS.GET_PASS_LIST, _path)
-    const passListHTML = Handlebars.templates["password_list"]({passwords: passwordEntries})
+    let passwordOwners = ipcRenderer.sendSync(constants.IPC_CONSTANTS.GET_PATH_OWNERS, _path)
+    const passListHTML = Handlebars.templates["password_list"]({passwords: passwordEntries, owners: passwordOwners})
     $("body").html(passListHTML)
     enableNavigation()
 }

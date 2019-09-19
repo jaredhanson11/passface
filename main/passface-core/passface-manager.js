@@ -1,4 +1,5 @@
 const fs = require("fs")
+const os = require('os')
 const path = require("path")
 const passfaceConstants = require("./passface-constants")
 const models = require("./passface-models")
@@ -34,6 +35,40 @@ module.exports.pass_show = function pass_show(pathToFile) {
    pathToFile = path.join(passfaceConstants.PASSWORD_STORE, pathToFile)
    const decryptedPwd = passfaceGpg.decrypt(pathToFile)
    return new models.DecyptedPasswordEntry(filename, directory, false, decryptedPwd)
+}
+
+module.exports.pass_owners = function pass_owners(pathToFile) {
+   pathToFile = path.join('.', pathToFile)
+   var ids = []
+   _path = path.join(passfaceConstants.PASSWORD_STORE, pathToFile)
+
+   let stats = fs.statSync(_path)
+   if (!stats.isDirectory()) {
+      _path = path.dirname(pathToFile)
+   }
+
+   var doContinue = true
+   while (doContinue) {
+      if (_path == passfaceConstants.PASSWORD_STORE) {
+         doContinue = false
+      }
+
+      var gpgIdPath = path.join(_path, passfaceConstants.GPG_IDS_FILENAME)
+      if (fs.existsSync(gpgIdPath) && fs.statSync(gpgIdPath).isFile()) {
+         var ids = []
+         var _ids = fs.readFileSync(gpgIdPath).toString().split(os.EOL)
+         for (i in _ids) {
+            const id = _ids[i]
+            if (id.trim() != '') {
+               ids.push(id)
+            }
+            return ids
+         }
+      } else {
+         _path = path.dirname(_path)
+      }
+   }
+   return []
 }
 
 /**

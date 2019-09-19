@@ -12,6 +12,7 @@ module.exports.registerEvents = function registerEvents() {
     ipcMain.on(IPC_CONSTANTS.GET_PASS_LIST, getPassList)
     ipcMain.on(IPC_CONSTANTS.GET_PASSWORD, getPassword)
     ipcMain.on(IPC_CONSTANTS.OPEN_PASSWORD, openPassword)
+    ipcMain.on(IPC_CONSTANTS.GET_PATH_OWNERS, getPassOwners)
     // IPC_CONSTANTS.ENCRYPT_PASSWORD
 }
 
@@ -56,6 +57,11 @@ function openPassword(event, _path) {
 function getPassword(event, _path) {
     _path = path.join(..._path)
     event.returnValue = passfaceManager.pass_show(_path)
+}
+
+function getPassOwners(event, _path) {
+  if (_path == null) { _path = [] }
+  event.returnValue = passfaceManager.pass_owners(path.join(..._path))
 }
 
 function encryptPassword(event, arg1, arg2) {}

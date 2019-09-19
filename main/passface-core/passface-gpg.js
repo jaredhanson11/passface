@@ -8,6 +8,8 @@ module.exports.decrypt = function(filepath, datastore) {
     const isMac = true;
     // Get this next value from user settings
     gpg = 'gpg'
+    // when on windows
+    gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
     return _decrypt(filepath, gpg)
 }
 
@@ -30,6 +32,8 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
     console.log(decrypt_args)
     p1_decrypt = spawnSync(gpgPath, decrypt_args)
     // CHECK STDERR FOR STATUS OF COMMAND
+    console.log(p1_decrypt)
+    console.log(p1_decrypt.stderr.toString())
     const decrypted = p1_decrypt.stdout.toString()
     console.log(p1_decrypt.stderr.toString())
     return decrypted
