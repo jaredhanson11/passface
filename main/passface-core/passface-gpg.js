@@ -1,16 +1,19 @@
 let path = require('path')
+let os = require('os')
+let { GpgErrors } = require('./passface-models')
+let { DecryptGpgErrorCodes } = require('./passface-constants')
 let { spawnSync} = require('child_process')
 
 module.exports.encrypt = function(to_encrypt, filepath, datastore) {
 }
 
-module.exports.decrypt = function(filepath, datastore) {
+module.exports.decrypt = function(filepath, gpgPwd, datastore) {
     const isMac = true;
     // Get this next value from user settings
     gpg = 'gpg'
     // when on windows
-    gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
-    return _decrypt(filepath, gpg)
+    //gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
+    return _decrypt(filepath, gpg, gpgPwd)
 }
 
 function _encrypt(outputPath, gpgPath, toEncrypt, gpgIds) {
@@ -29,14 +32,28 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
     }
     // maybe need --with-colons
     decrypt_args = ['--batch', '--status-fd', '2', '--pinentry-mode', 'loopback',  ...passphrase_options, '--decrypt', inputPath]
-    console.log(decrypt_args)
     p1_decrypt = spawnSync(gpgPath, decrypt_args)
     // CHECK STDERR FOR STATUS OF COMMAND
-    console.log(p1_decrypt)
-    console.log(p1_decrypt.stderr.toString())
-    const decrypted = p1_decrypt.stdout.toString()
-    console.log(p1_decrypt.stderr.toString())
-    return decrypted
+    const error = check_error(p1_decrypt.stderr.toString(), new GpgErrors(DecryptGpgErrorCodes))
+    if (error) {
+      return {decryptedPwd: null, error: error}
+    } else {
+      const decrypted = p1_decrypt.stdout.toString()
+      return {decryptedPwd: decrypted, error: null}
+    }
+}
+
+function check_error(stdErr, gpgErrs) {
+    const lines = stdErr.split(os.EOL)
+    // could probably just search entire string not line by line
+    for (var i in lines) {
+      const line = lines[i]
+      for (var err in gpgErrs.errToCode) {
+        if (line.includes(err)) {
+          return gpgErrs.errToCode[err]
+        }
+      }
+    }
 }
 
 // _encrypt('hi', 'gpg', 'thisismypassword', ['jared_t_hanson@apple.com'])

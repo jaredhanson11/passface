@@ -13,11 +13,26 @@ class PasswordEntry {
 class DecyptedPasswordEntry extends PasswordEntry {
 
    password
+   error
 
-   constructor(name, path, isDirectory, password) {
+   constructor(name, path, isDirectory, password, error) {
       super(name, path, isDirectory)
       this.password = password
+      this.error=error
    }
 }
 
- module.exports = { PasswordEntry, DecyptedPasswordEntry }
+class GpgErrors {
+   // Error message -> error code (opposite of mapping in GpgErrorCodes object)
+   errToCode
+
+   constructor(errCodes) {
+      this.errToCode = {}
+      for (var errCode in errCodes) {
+         const errMessage = errCodes[errCode]
+         this.errToCode[errMessage] = errCode
+      }
+   }
+}
+
+ module.exports = { GpgErrors, PasswordEntry, DecyptedPasswordEntry }

@@ -29,12 +29,12 @@ module.exports.pass_list = function pass_list(directory) {
 /**
  * Given a password path such that <path>.gpg exists, attempts to decrypts the file with the default GPG key.
  */
-module.exports.pass_show = function pass_show(pathToFile) {
+module.exports.pass_show = function pass_show(pathToFile, gpgPwd) {
    const filename = path.basename(pathToFile)
    const directory = path.dirname(pathToFile)
    pathToFile = path.join(passfaceConstants.PASSWORD_STORE, pathToFile)
-   const decryptedPwd = passfaceGpg.decrypt(pathToFile)
-   return new models.DecyptedPasswordEntry(filename, directory, false, decryptedPwd)
+   const {decryptedPwd, error} = passfaceGpg.decrypt(pathToFile, gpgPwd)
+   return new models.DecyptedPasswordEntry(filename, directory, false, decryptedPwd, error)
 }
 
 module.exports.pass_owners = function pass_owners(pathToFile) {

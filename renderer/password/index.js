@@ -9,7 +9,6 @@ $(document).ready(function(event) {
 
 function renderPwd(editable) {
   const _fp = getPwdPath()
-  console.log(_fp)
   if (_fp.trim().endsWith('.gpg')) {
     const decryptedPwd = ipcRenderer.sendSync(constants.IPC_CONSTANTS.GET_PASSWORD, [_fp])
     const passListHTML = Handlebars.templates["password"]({password: decryptedPwd, editable: editable})

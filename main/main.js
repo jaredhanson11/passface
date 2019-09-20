@@ -34,9 +34,7 @@ function openPassword(event, _path) {
 
   // and load the index.html of the app.
   _path = path.join(..._path)
-  console.log(_path)
   const _fp = path.join(passfaceConstants.RENDERER_BASE, 'password', 'index.html')
-  console.log(_fp)
   pwdWin.loadFile(_fp, {query: {path: _path}})
 
   // Open the DevTools.
@@ -54,9 +52,9 @@ function openPassword(event, _path) {
   })
 }
 
-function getPassword(event, _path) {
+function getPassword(event, _path, gpgPwd) {
     _path = path.join(..._path)
-    event.returnValue = passfaceManager.pass_show(_path)
+    event.returnValue = passfaceManager.pass_show(_path, gpgPwd)
 }
 
 function getPassOwners(event, _path) {
