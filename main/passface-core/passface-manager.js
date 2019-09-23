@@ -4,6 +4,8 @@ const path = require("path")
 const passfaceConstants = require("./passface-constants")
 const models = require("./passface-models")
 const passfaceGpg = require('./passface-gpg')
+const { dataStore }= require('./passface-datastore')
+console.log(dataStore)
 
 /**
  * Pass List loops through the $PASSWORD_STORE directory and finds all *.gpg files

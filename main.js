@@ -58,4 +58,7 @@ app.on('activate', () => {
 
 // Register listeners
 const main = require('./main/main')
+// Check the current computer and do any setup steps if not properly configured
+main.setup()
+// Register IPC events allowing communication between main and renderer processes
 main.registerEvents()

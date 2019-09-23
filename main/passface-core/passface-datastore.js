@@ -1,12 +1,16 @@
 const Store = require('electron-store')
 const passfaceConstants = require('./passface-constants')
 
+// Currently doesn't save anything on disk because setup step is stateless
+// Eventually, this should save setup steps done so that only new setup is to be done
+//  AKA: shouldn't attempt to reimport all <base>/pub-keys/* each time the app is started
+
 class DataStore extends Store {
 
     // String
     // The current user's GPG key UID aka the private key that can decrypt passwords
-    userGpgKey = null
-    userGpgKey_key = 'userGpgKey'
+    gpgKey = null
+    gpgKey_key = 'gpgKey'
 
     // Array<String>
     // The known GPG keys aka the public keys that are already imported into GPG client
@@ -15,8 +19,12 @@ class DataStore extends Store {
 
     // String
     // The path to the GPG program installed on the current computer
-    userGpgPath = null
-    userGpgPath_key = "gpgPath"
+    gpgPath = null
+    gpgPath_key = "gpgPath"
+
+    // String
+    gitPath = null
+    gitPath_key = "gitPath"
 
     constructor(settings) {
         if (settings == null || typeof settings != 'object') { settings = {}}
@@ -25,9 +33,9 @@ class DataStore extends Store {
         this.refresh()
     }
 
-    setUserGpgKey(gpgKey) {
+    setGpgKey(gpgKey) {
         // gpgKey is the key's UID
-        this.userGpgKey = gpgKey
+        this.gpgKey = gpgKey
         return this
     }
 
@@ -36,22 +44,30 @@ class DataStore extends Store {
         return this
     }
 
-    setUserGpgPath(gpgPath) {
-        this.userGpgPath = gpgPath
+    setGpgPath(gpgPath) {
+        this.gpgPath = gpgPath
+        return this
+    }
+
+    setGitPath(gitPath) {
+        this.gitPath = gitPath
         return this
     }
 
     save() {
-        this.set(this.userGpgKey_key, this.userGpgKey)
+        this.set(this.gpgKey_key, this.gpgKey)
         this.set(this.publicKeys_key, this.publicKeys)
-        this.set(this.userGpgPath_key, this.userGpgPath)
+        this.set(this.gpgPath_key, this.gpgPath)
+        this.set(this.gitPath_key, this.gitPath)
     }
 
     refresh() {
-        this.userGpgKey = this.get(this.userGpgKey_key) || null
+        this.gpgKey = this.get(this.gpgKey_key) || null
         this.publicKeys = this.get(this.publicKeys_key) || []
-        this.userGpgPath = this.get(this.userGpgPath_key, this.userGpgPath) || null
+        this.gpgPath = this.get(this.gpgPath_key, this.gpgPath) || null
+        this.gitPath = this.get(this.gitPath_key, this.gitPath) || null
     }
 }
 
-module.exports = DataStore
+const dataStoreObject = new DataStore({name: 'passface-config'})
+module.exports.dataStore = dataStoreObject

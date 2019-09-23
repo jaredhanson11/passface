@@ -1,6 +1,7 @@
 let path = require('path')
 let os = require('os')
 let { DECRYPT_GPG_ERROR_CODES } = require('./passface-constants')
+let { dataStore } = require('./passface-datastore')
 let { spawnSync} = require('child_process')
 
 module.exports.encrypt = function(to_encrypt, filepath, datastore) {

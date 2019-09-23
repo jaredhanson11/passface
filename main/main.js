@@ -7,22 +7,29 @@ const path = require('path')
 const { IPC_CONSTANTS } = require('../constants')
 const passfaceManager = require('./passface-core/passface-manager')
 const passfaceConstants = require('./passface-core/passface-constants')
+let { dataStore } = require('./passface-core/passface-datastore')
 
 module.exports.registerEvents = function registerEvents() {
-    ipcMain.on(IPC_CONSTANTS.GET_PASS_LIST, getPassList)
-    ipcMain.on(IPC_CONSTANTS.GET_PASSWORD, getPassword)
-    ipcMain.on(IPC_CONSTANTS.OPEN_PASSWORD, openPassword)
-    ipcMain.on(IPC_CONSTANTS.GET_PATH_OWNERS, getPassOwners)
-    ipcMain.on(IPC_CONSTANTS.ENCRYPT_PASSWORD, encryptPassword)
+    ipcMain.on(IPC_CONSTANTS.GET_PASS_LIST, IPC_getPassList)
+    ipcMain.on(IPC_CONSTANTS.GET_PASSWORD, IPC_getPassword)
+    ipcMain.on(IPC_CONSTANTS.OPEN_PASSWORD, IPC_openPassword)
+    ipcMain.on(IPC_CONSTANTS.GET_PATH_OWNERS, IPC_getPassOwners)
+    ipcMain.on(IPC_CONSTANTS.ENCRYPT_PASSWORD, IPC_encryptPassword)
 }
 
-function getPassList(event, _path) {
+module.exports.setup = function setup() {
+
+}
+
+
+///////// IPC WRAPPER FUNCTIONS /////////
+function IPC_getPassList(event, _path) {
     if (_path == null) { _path = [] }
     _path = path.join(..._path)
     event.returnValue = passfaceManager.pass_list(_path)
 }
 
-function openPassword(event, _path) {
+function IPC_openPassword(event, _path) {
   let pwdWin
   pwdWin = new BrowserWindow({
     width: 800,
@@ -52,17 +59,17 @@ function openPassword(event, _path) {
   })
 }
 
-function getPassword(event, _path, gpgPwd) {
+function IPC_getPassword(event, _path, gpgPwd) {
     _path = path.join(..._path)
     event.returnValue = passfaceManager.pass_show(_path, gpgPwd)
 }
 
-function getPassOwners(event, _path) {
+function IPC_getPassOwners(event, _path) {
   if (_path == null) { _path = [] }
   event.returnValue = passfaceManager.pass_owners(path.join(..._path))
 }
 
-function encryptPassword(event, arg1, arg2) {
+function IPC_encryptPassword(event, arg1, arg2) {
   console.log('ENCRYPTING PASSWORD PLACEHOLDER')
   event.returnValue = ''
 }
