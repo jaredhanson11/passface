@@ -21,18 +21,4 @@ class DecyptedPasswordEntry extends PasswordEntry {
       this.error=error
    }
 }
-
-class GpgErrors {
-   // Error message -> error code (opposite of mapping in GpgErrorCodes object)
-   errToCode
-
-   constructor(errCodes) {
-      this.errToCode = {}
-      for (var errCode in errCodes) {
-         const errMessage = errCodes[errCode]
-         this.errToCode[errMessage] = errCode
-      }
-   }
-}
-
- module.exports = { GpgErrors, PasswordEntry, DecyptedPasswordEntry }
+ module.exports = { PasswordEntry, DecyptedPasswordEntry }

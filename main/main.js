@@ -62,4 +62,6 @@ function getPassOwners(event, _path) {
   event.returnValue = passfaceManager.pass_owners(path.join(..._path))
 }
 
-function encryptPassword(event, arg1, arg2) {}
+function encryptPassword(event, arg1, arg2) {
+  console.log('ENCRYPTING PASSWORD PLACEHOLDER')
+}

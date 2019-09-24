@@ -1,6 +1,5 @@
 let path = require('path')
 let os = require('os')
-let { GpgErrors } = require('./passface-models')
 let { DECRYPT_GPG_ERROR_CODES } = require('./passface-constants')
 let { spawnSync} = require('child_process')
 
@@ -12,7 +11,7 @@ module.exports.decrypt = function(filepath, gpgPwd, datastore) {
     // Get this next value from user settings
     gpg = 'gpg'
     // when on windows
-    gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
+    //gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
     return _decrypt(filepath, gpg, gpgPwd)
 }
 
@@ -34,7 +33,7 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
     decrypt_args = ['--batch', '--status-fd', '2', '--pinentry-mode', 'loopback',  ...passphrase_options, '--decrypt', inputPath]
     p1_decrypt = spawnSync(gpgPath, decrypt_args)
     // CHECK STDERR FOR STATUS OF COMMAND
-    const error = check_error(p1_decrypt.stderr.toString(), new GpgErrors(DECRYPT_GPG_ERROR_CODES))
+    const error = check_error(p1_decrypt.stderr.toString(), DECRYPT_GPG_ERROR_CODES)
     if (error) {
       return {decryptedPwd: null, error: error}
     } else {
@@ -49,9 +48,10 @@ function check_error(stdErr, gpgErrs) {
   // could probably just search entire string not line by line
   for (var i in lines) {
     const line = lines[i]
-    for (var err in gpgErrs.errToCode) {
-      if (line.includes(err)) {
-        return gpgErrs.errToCode[err]
+    for (var err in gpgErrs) {
+      var error = gpgErrs[err]
+      if (line.includes(error.message)) {
+        return error.code
       }
     }
   }

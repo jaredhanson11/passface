@@ -7,10 +7,12 @@ const IPC_CONSTANTS = {
     ENCRYPT_PASSWORD: 'encrypt-password-synchronous'
 };
 
+const error = (message, code) => {return {message: message, code: code}}
+
 // GpgErrorCodes
-const NEED_PK_PWD = "NEED_PASSPHRASE"
-const BAD_PK_PWD = "ERROR pkdecrypt_failed"
-const DECRYPTION_FAILED = "DECRYPTION_FAILED"
+const NEED_PK_PWD = error("NEED_PASSPHRASE", "NEED_PK_PWD")
+const BAD_PK_PWD  = error("ERROR pkdecrypt_failed", "BAD_PK_PWD")
+const DECRYPTION_FAILED = error("DECRYPTION_FAILED", "DECRYPTION_FAILED")
 
 const DECRYPT_GPG_ERROR_CODES = {
   NEED_PK_PWD,
