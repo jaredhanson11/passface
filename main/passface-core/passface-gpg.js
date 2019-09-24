@@ -1,7 +1,7 @@
 let path = require('path')
 let os = require('os')
 let { GpgErrors } = require('./passface-models')
-let { DecryptGpgErrorCodes } = require('./passface-constants')
+let { DECRYPT_GPG_ERROR_CODES } = require('./passface-constants')
 let { spawnSync} = require('child_process')
 
 module.exports.encrypt = function(to_encrypt, filepath, datastore) {
@@ -12,7 +12,7 @@ module.exports.decrypt = function(filepath, gpgPwd, datastore) {
     // Get this next value from user settings
     gpg = 'gpg'
     // when on windows
-    //gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
+    gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
     return _decrypt(filepath, gpg, gpgPwd)
 }
 
@@ -34,7 +34,7 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
     decrypt_args = ['--batch', '--status-fd', '2', '--pinentry-mode', 'loopback',  ...passphrase_options, '--decrypt', inputPath]
     p1_decrypt = spawnSync(gpgPath, decrypt_args)
     // CHECK STDERR FOR STATUS OF COMMAND
-    const error = check_error(p1_decrypt.stderr.toString(), new GpgErrors(DecryptGpgErrorCodes))
+    const error = check_error(p1_decrypt.stderr.toString(), new GpgErrors(DECRYPT_GPG_ERROR_CODES))
     if (error) {
       return {decryptedPwd: null, error: error}
     } else {
@@ -44,16 +44,17 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
 }
 
 function check_error(stdErr, gpgErrs) {
-    const lines = stdErr.split(os.EOL)
-    // could probably just search entire string not line by line
-    for (var i in lines) {
-      const line = lines[i]
-      for (var err in gpgErrs.errToCode) {
-        if (line.includes(err)) {
-          return gpgErrs.errToCode[err]
-        }
+  console.log(stdErr)
+  const lines = stdErr.split(os.EOL)
+  // could probably just search entire string not line by line
+  for (var i in lines) {
+    const line = lines[i]
+    for (var err in gpgErrs.errToCode) {
+      if (line.includes(err)) {
+        return gpgErrs.errToCode[err]
       }
     }
+  }
 }
 
 // _encrypt('hi', 'gpg', 'thisismypassword', ['jared_t_hanson@apple.com'])

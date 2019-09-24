@@ -12,7 +12,7 @@ function renderPwd(editable) {
   if (_fp.trim().endsWith('.gpg')) {
     const decryptedPwd = ipcRenderer.sendSync(constants.IPC_CONSTANTS.GET_PASSWORD, [_fp])
     const passListHTML = Handlebars.templates["password"]({password: decryptedPwd, editable: editable})
-    $("body").html(passListHTML)
+    $(".body").html(passListHTML)
     eventListeners()
   } else {
     alert("BAD FILE")
