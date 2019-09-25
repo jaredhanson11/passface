@@ -43,7 +43,6 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
 }
 
 function check_error(stdErr, gpgErrs) {
-  console.log(stdErr)
   const lines = stdErr.split(os.EOL)
   // could probably just search entire string not line by line
   for (var i in lines) {

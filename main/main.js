@@ -13,7 +13,7 @@ module.exports.registerEvents = function registerEvents() {
     ipcMain.on(IPC_CONSTANTS.GET_PASSWORD, getPassword)
     ipcMain.on(IPC_CONSTANTS.OPEN_PASSWORD, openPassword)
     ipcMain.on(IPC_CONSTANTS.GET_PATH_OWNERS, getPassOwners)
-    // IPC_CONSTANTS.ENCRYPT_PASSWORD
+    ipcMain.on(IPC_CONSTANTS.ENCRYPT_PASSWORD, encryptPassword)
 }
 
 function getPassList(event, _path) {
@@ -64,4 +64,5 @@ function getPassOwners(event, _path) {
 
 function encryptPassword(event, arg1, arg2) {
   console.log('ENCRYPTING PASSWORD PLACEHOLDER')
+  event.returnValue = ''
 }

@@ -62,8 +62,8 @@ module.exports.pass_owners = function pass_owners(pathToFile) {
             if (id.trim() != '') {
                ids.push(id)
             }
-            return ids
          }
+         return ids
       } else {
          _path = path.dirname(_path)
       }
