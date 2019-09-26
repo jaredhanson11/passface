@@ -18,7 +18,7 @@ module.exports.registerEvents = function registerEvents() {
 }
 
 module.exports.setup = function setup() {
-
+  passfaceManager.setup()
 }
 
 

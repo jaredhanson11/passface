@@ -4,8 +4,8 @@ const path = require("path")
 const passfaceConstants = require("./passface-constants")
 const models = require("./passface-models")
 const passfaceGpg = require('./passface-gpg')
+const passfaceGit = require('./passface-git')
 const { dataStore }= require('./passface-datastore')
-console.log(dataStore)
 
 /**
  * Pass List loops through the $PASSWORD_STORE directory and finds all *.gpg files
@@ -71,6 +71,11 @@ module.exports.pass_owners = function pass_owners(pathToFile) {
       }
    }
    return []
+}
+
+module.exports.setup = function setup() {
+   passfaceGpg.setup()
+   passfaceGit.setup()
 }
 
 /**

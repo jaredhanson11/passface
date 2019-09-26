@@ -3,17 +3,26 @@ let os = require('os')
 let { DECRYPT_GPG_ERROR_CODES } = require('./passface-constants')
 let { dataStore } = require('./passface-datastore')
 let { spawnSync} = require('child_process')
+let passfaceUtilities = require('./passface-utilities')
 
-module.exports.encrypt = function(to_encrypt, filepath, datastore) {
+module.exports.encrypt = function(to_encrypt, filepath) {
 }
 
-module.exports.decrypt = function(filepath, gpgPwd, datastore) {
+module.exports.decrypt = function(filepath, gpgPwd) {
     const isMac = true;
     // Get this next value from user settings
-    gpg = 'gpg'
     // when on windows
     //gpg = 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'
-    return _decrypt(filepath, gpg, gpgPwd)
+    return _decrypt(filepath, dataStore.gpgPath, gpgPwd)
+}
+
+module.exports.setup = function() {
+  const findProgram = passfaceUtilities.findProgram('gpg')
+  if (findProgram.error) {
+    alert('DOWNLOAD GPG AND DON\'t MOVE FORWARD')
+  } else {
+    dataStore.setGpgPath(findProgram.path)
+  }
 }
 
 function _encrypt(outputPath, gpgPath, toEncrypt, gpgIds) {
