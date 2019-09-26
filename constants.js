@@ -10,9 +10,9 @@ const IPC_CONSTANTS = {
 const error = (message, code) => {return {message: message, code: code}}
 
 // GpgErrorCodes
-const NEED_PK_PWD = error("NEED_PASSPHRASE", "NEED_PK_PWD")
-const BAD_PK_PWD  = error("ERROR pkdecrypt_failed", "BAD_PK_PWD")
-const DECRYPTION_FAILED = error("DECRYPTION_FAILED", "DECRYPTION_FAILED")
+const NEED_PK_PWD = error('NEED_PASSPHRASE', 'NEED_PK_PWD')
+const BAD_PK_PWD  = error('ERROR pkdecrypt_failed', 'BAD_PK_PWD')
+const DECRYPTION_FAILED = error('DECRYPTION_FAILED', 'DECRYPTION_FAILED')
 
 const DECRYPT_GPG_ERROR_CODES = {
   NEED_PK_PWD,
@@ -20,7 +20,17 @@ const DECRYPT_GPG_ERROR_CODES = {
   DECRYPTION_FAILED
 }
 
+// Git Error Codes
+const NO_REPO_EXISTS = error('No such file or directory', 'NO_REPO_EXISTS')
+const NO_GIT_REPO = error('not a git repository', 'NO_GIT_REPO')
+
+const GIT_ERROR_CODES = {
+  NO_REPO_EXISTS,
+  NO_GIT_REPO
+}
+
 module.exports = { 
     IPC_CONSTANTS,
-    DECRYPT_GPG_ERROR_CODES
+    DECRYPT_GPG_ERROR_CODES,
+    GIT_ERROR_CODES
 }

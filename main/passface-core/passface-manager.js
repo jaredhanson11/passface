@@ -11,7 +11,7 @@ const { dataStore }= require('./passface-datastore')
  * Pass List loops through the $PASSWORD_STORE directory and finds all *.gpg files
  */
 module.exports.pass_list = function pass_list(directory) {
-   let dir = path.join(passfaceConstants.PASSWORD_STORE, directory)
+   let dir = path.join(passfaceConstants.DEFAULT_PASSWORD_STORE, directory)
    var passwordEntries = []
    let files = fs.readdirSync(dir);
    files.forEach(file => {
@@ -34,7 +34,7 @@ module.exports.pass_list = function pass_list(directory) {
 module.exports.pass_show = function pass_show(pathToFile, gpgPwd) {
    const filename = path.basename(pathToFile)
    const directory = path.dirname(pathToFile)
-   pathToFile = path.join(passfaceConstants.PASSWORD_STORE, pathToFile)
+   pathToFile = path.join(passfaceConstants.DEFAULT_PASSWORD_STORE, pathToFile)
    const {decryptedPwd, error} = passfaceGpg.decrypt(pathToFile, gpgPwd)
    return new models.DecyptedPasswordEntry(filename, directory, false, decryptedPwd, error)
 }
@@ -42,7 +42,7 @@ module.exports.pass_show = function pass_show(pathToFile, gpgPwd) {
 module.exports.pass_owners = function pass_owners(pathToFile) {
    pathToFile = path.join('.', pathToFile)
    var ids = []
-   _path = path.join(passfaceConstants.PASSWORD_STORE, pathToFile)
+   _path = path.join(passfaceConstants.DEFAULT_PASSWORD_STORE, pathToFile)
 
    let stats = fs.statSync(_path)
    if (!stats.isDirectory()) {
@@ -51,7 +51,7 @@ module.exports.pass_owners = function pass_owners(pathToFile) {
 
    var doContinue = true
    while (doContinue) {
-      if (_path == passfaceConstants.PASSWORD_STORE) {
+      if (_path == passfaceConstants.DEFAULT_PASSWORD_STORE) {
          doContinue = false
       }
 

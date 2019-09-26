@@ -26,6 +26,10 @@ class DataStore extends Store {
     gitPath = null
     gitPath_key = "gitPath"
 
+    //String
+    passwordStorePath = null
+    passwordStorePath_key = 'passwordStorePath'
+
     constructor(settings) {
         if (settings == null || typeof settings != 'object') { settings = {}}
         settings.name = passfaceConstants.DATA_STORE_FILE_NAME
@@ -54,18 +58,27 @@ class DataStore extends Store {
         return this
     }
 
+    setPasswordStorePath(passwordStorePath) {
+        this.passwordStorePath = passwordStorePath
+        return this
+    }
+
     save() {
         this.set(this.gpgKey_key, this.gpgKey)
         this.set(this.publicKeys_key, this.publicKeys)
         this.set(this.gpgPath_key, this.gpgPath)
         this.set(this.gitPath_key, this.gitPath)
+        this.set(this.passwordStorePath_key, this.passwordStorePath)
+        return this
     }
 
     refresh() {
-        this.gpgKey = this.get(this.gpgKey_key) || null
-        this.publicKeys = this.get(this.publicKeys_key) || []
-        this.gpgPath = this.get(this.gpgPath_key, this.gpgPath) || null
-        this.gitPath = this.get(this.gitPath_key, this.gitPath) || null
+        this.gpgKey = this.get(this.gpgKey_key, this.gpgKey)
+        this.publicKeys = this.get(this.publicKeys_key, this.publicKeys)
+        this.gpgPath = this.get(this.gpgPath_key, this.gpgPath)
+        this.gitPath = this.get(this.gitPath_key, this.gitPath)
+        this.passwordStorePath = this.get(this.passwordStorePath_key, this.passwordStorePath)
+        return this
     }
 }
 

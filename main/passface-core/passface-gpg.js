@@ -21,7 +21,7 @@ module.exports.setup = function() {
   if (findProgram.error) {
     alert('DOWNLOAD GPG AND DON\'t MOVE FORWARD')
   } else {
-    dataStore.setGpgPath(findProgram.path)
+    dataStore.setGpgPath(findProgram.path).save()
   }
 }
 
@@ -43,27 +43,13 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
     decrypt_args = ['--batch', '--status-fd', '2', '--pinentry-mode', 'loopback',  ...passphrase_options, '--decrypt', inputPath]
     p1_decrypt = spawnSync(gpgPath, decrypt_args)
     // CHECK STDERR FOR STATUS OF COMMAND
-    const error = check_error(p1_decrypt.stderr.toString(), DECRYPT_GPG_ERROR_CODES)
+    const error = passfaceUtilities.checkError(p1_decrypt.stderr, DECRYPT_GPG_ERROR_CODES)
     if (error) {
       return {decryptedPwd: null, error: error}
     } else {
       const decrypted = p1_decrypt.stdout.toString()
       return {decryptedPwd: decrypted, error: null}
     }
-}
-
-function check_error(stdErr, gpgErrs) {
-  const lines = stdErr.split(os.EOL)
-  // could probably just search entire string not line by line
-  for (var i in lines) {
-    const line = lines[i]
-    for (var err in gpgErrs) {
-      var error = gpgErrs[err]
-      if (line.includes(error.message)) {
-        return error.code
-      }
-    }
-  }
 }
 
 // _encrypt('hi', 'gpg', 'thisismypassword', ['jared_t_hanson@apple.com'])
