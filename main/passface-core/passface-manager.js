@@ -74,8 +74,8 @@ module.exports.pass_owners = function pass_owners(pathToFile) {
 }
 
 module.exports.setup = function setup() {
-   passfaceGpg.setup()
    passfaceGit.setup()
+   passfaceGpg.setup()
 }
 
 /**

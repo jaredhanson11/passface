@@ -7,6 +7,7 @@ const RENDERER_BASE = path.join(PROJECT_BASE, 'renderer')
 const MAIN_BASE = path.join(PROJECT_BASE, 'main')
 const DEFAULT_PASSWORD_STORE = path.join(os.homedir(), ".password-store")
 const GPG_IDS_FILENAME = ".gpg-id"
+const PUB_KEYS_FOLDER_NAME = "pub-keys"
 
 // Name of file used to store passface user data
 const DATA_STORE_FILE_NAME = 'passface-storage'
@@ -19,5 +20,6 @@ module.exports = {
     DATA_STORE_FILE_NAME,
     GPG_IDS_FILENAME,
     DECRYPT_GPG_ERROR_CODES,
+    PUB_KEYS_FOLDER_NAME,
     GIT_ERROR_CODES
 }

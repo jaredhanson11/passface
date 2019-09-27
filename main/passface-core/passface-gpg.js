@@ -1,6 +1,7 @@
 let path = require('path')
+let fs = require('fs')
 let os = require('os')
-let { DECRYPT_GPG_ERROR_CODES } = require('./passface-constants')
+let { DECRYPT_GPG_ERROR_CODES, PUB_KEYS_FOLDER_NAME } = require('./passface-constants')
 let { dataStore } = require('./passface-datastore')
 let { spawnSync} = require('child_process')
 let passfaceUtilities = require('./passface-utilities')
@@ -23,6 +24,7 @@ module.exports.setup = function() {
   } else {
     dataStore.setGpgPath(findProgram.path).save()
   }
+  _importPubKeys()
 }
 
 function _encrypt(outputPath, gpgPath, toEncrypt, gpgIds) {
@@ -50,6 +52,16 @@ function _decrypt(inputPath, gpgPath, gpgPwd) {
       const decrypted = p1_decrypt.stdout.toString()
       return {decryptedPwd: decrypted, error: null}
     }
+}
+
+function _importPubKeys() {
+  const pubKeysPath = path.join(dataStore.passwordStorePath, PUB_KEYS_FOLDER_NAME)
+  console.log(pubKeysPath)
+  const files = fs.readdirSync(pubKeysPath)
+  for (i in files) {
+    const file = files[i]
+    console.log(file)
+  }
 }
 
 // _encrypt('hi', 'gpg', 'thisismypassword', ['jared_t_hanson@apple.com'])
